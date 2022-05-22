@@ -1,29 +1,32 @@
+// import * as THREE from 'three'
+// import { OrbitControls } from 'OrbitControls.js'
+
 let scene = new THREE.Scene();
-//35: aguster le chant de vue, window.innerWidth/window.innerHeight: La grosseur de la fenetre, 0.1: ?,
-// 3000: wenn man weit als 3000 ist, funktioniert nicht mehr
+//35: adjusting the edge of the view, window.innerWidth/window.innerHeight: Size of the window, 0.1: ?,
+// 3000: when you are far than 3000 no longer works
 let camera = new THREE.PerspectiveCamera(35, window.innerWidth/window.innerHeight, 0.1, 3000);
 camera.position.z= 100;
 
 let result = new THREE.WebGLRenderer();
-//size geben
+//size
 result.setSize(window.innerWidth, window.innerHeight);
-// collor geben
+// collor
 result.setClearColor(0x132644)
 
-//resultin Html datei hinzufügen
+//Add result to html file
 
 document.body.appendChild(result.domElement);
 
-// erstellung unsere 3D Element
-// - creer un group pour regrouper notre element 3D
+// creation of our 3D element
+// create a group to group our 3D element
 
 let forme = new THREE.Group();
 
-//- Erstellung der Geometrie Element
+//- Creation of geometry element
 let geometrie = new THREE.TorusKnotGeometry(10,3,100,16);
-//- erstellung der Materiel
+//- creation of the material
 let materiel = new THREE.MeshNormalMaterial({
-    // Die parameter müssen nicht gegeben werden
+    // The parameters do not have to be given
     color: 0xff000,
     transparent: true,
     opacity: 1,
@@ -37,21 +40,29 @@ forme.add(new THREE.Mesh(geometrie,materiel));
 scene.add(forme);
 //--------------------------------------
 
-// Form dinamique machen
+// makes the rotation dinamic
 
-// function pour deplacer la forme
-// let control = new THREE.OrbitControls(camera);
-// control.update();
+// function to move the shape
+let control = new THREE.OrbitControls( camera, result.domElement);
 
-// Function der die Rotation macht
+//time to visualization
+let clock = new THREE.Clock();
+
+// Function that makes the rotation
 let anim = function (){
     requestAnimationFrame(anim);
+    let time = clock.getElapsedTime();
 
+    // ohne time
     forme.rotation.x += 0.005;
-    forme.rotation.y += 0.005;
+
+    // mit time
+    forme.rotation.y += time * 0.001;
+
     result.render(scene, camera);
 };
 anim();
+
 
 
 // result.render(scene, camera);
